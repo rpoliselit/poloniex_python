@@ -214,7 +214,7 @@ class poloniex:
             req['end'] = end
         return self.api_query(True, req)
 
-    def buy(self, currencyPair, rate, amount, fok=False, ioc=False, po=False):
+    def limitBuy(self, currency_pair, rate, amount, fok=False, ioc=False, po=False):
         '''
         Places a limit buy order in a given market.
         :currency_pair: The major and minor currency defining the market where this sell order should be placed.
@@ -238,7 +238,7 @@ class poloniex:
             req['postOnly'] = '1'
         return self.api_query(True, req)
 
-    def sell(self, currency_pair, rate, amount, fok=False, ioc=False, po=False):
+    def limitSell(self, currency_pair, rate, amount, fok=False, ioc=False, po=False):
         '''
         Places a sell order in a given market.
         :currency_pair: The major and minor currency defining the market where this sell order should be placed.
@@ -261,6 +261,44 @@ class poloniex:
         if po == True:
             req['postOnly'] = '1'
         return self.api_query(True, req)
+
+    def marketBuy(self, currency_pair, amount):
+        """
+        This is a limit order that tries to emulate a market order.
+        """
+        # calcular o rate num 'for'
+        asks = self.rOrderBook(currency_pair=currency_pair, field='asks')
+        list_resp = []
+        for ask in asks:
+            if ask[1] < amount:
+                bought = self.limitBuy(currency_pair, rate=ask[0], amount=ask[1], ioc=True)
+                list_resp.append(bought)
+                amount -= ask[1]
+            elif ask[1] >= amount:
+                bought = self.limitBuy(currency_pair, rate=ask[0], amount=amount, ioc=True)
+                list_resp.append(bought)
+                amount -= amount
+                break
+        return list_resp
+
+    def marketSell(self, currency_pair, amount):
+        """
+        This is a limit order that tries to emulate a market order.
+        """
+        # calcular o rate num 'for'
+        bids = rOrderBook(currency_pair=currency_pair, field='bids')
+        list_resp = []
+        for bid in bids:
+            if bid[1] < amount:
+                sold = self.limitSell(currency_pair, rate=bid[0], amount=bid[1], ioc=True)
+                list_resp.append(sold)
+                amount -= bid[0]
+            elif bid[1] >= amount:
+                sold = self.limitSell(currency_pair, rate=bid[0], amount=amount, ioc=True)
+                list_resp.append(sold)
+                amount -= amount
+                break
+        return list_resp
 
     def cancelOrder(self, currency_pair, order_Number):
         '''

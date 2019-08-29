@@ -1,2 +1,2 @@
 # poloniex_python
-Module to use the Poliniex Exchange API with python.
+Module to use the Poloniex Exchange API with python.

@@ -27,6 +27,8 @@ class poloniex:
         urlP = 'https://poloniex.com/public'
         #trading api url
         urlT = 'https://poloniex.com/tradingApi'
+        #websockets api url
+        urlWS = 'wss://api2.poloniex.com'
 
         if privateAPI == False:
             ret = self.request('GET', urlP, params=req)
@@ -160,7 +162,7 @@ class poloniex:
         return self.api_query(False, req)
 
 
-#TRADING API METHODS:
+# TRADING API METHODS:
     def rBalances(self, currency=None):
         '''
         Returns all of your balances available for trade after having deducted all open orders.
@@ -336,4 +338,16 @@ class poloniex:
         return api_query(True, req)
 
 
-    #WEBSOCKETS API METHODS
+# WEBSOCKETS API METHODS
+    def wsTicker(self):
+        req = {'command':'subscribe', 'chanel':1002}
+        # return self.api_query(privateAPI='WS', req=req)
+
+    def ws24hVolume(self):
+        req = {'command':'subscribe', 'chanel':1003}
+
+    def wsHeartbeats(self):
+        req = {'command':'subscribe', 'chanel':1010}
+
+    def wsPriceAggBook(self, currency_pair):
+        req = {'command':'subscribe', 'chanel':currency_pair}

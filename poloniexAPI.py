@@ -48,7 +48,9 @@ class poloniex:
 
             ret = self.request('POST', urlT, data=query_string, headers=headers)
         loop = asyncio.get_event_loop()
-        return loop.run_until_complete(ret)
+        resp = loop.run_until_complete(ret)
+        loop.close()
+        return resp
 
 
 # PUBLIC HTTP API METHODS:

@@ -15,12 +15,21 @@ class poloniex:
 
     async def request(self, type, url, params={}, data={}, headers={}):
         async with aiohttp.ClientSession() as session:
-            if type == 'GET':
-                async with session.get(url, params=params) as resp:
-                    return await resp.json()
-            elif type == 'POST':
-                async with session.post(url, data=data, headers=headers) as resp:
-                    return await resp.json()
+            while True:
+                if type == 'GET':
+                    async with session.get(url, params=params) as resp:
+                        if resp.status == 200:
+                            return await resp.json()
+                        else:
+                            print(resp.status)
+                            print(await resp.text())
+                elif type == 'POST':
+                    async with session.post(url, data=data, headers=headers) as resp:
+                        if resp.status == 200:
+                            return await resp.json()
+                        else:
+                            print(resp.stauts)
+                            print(await resp.text())
 
     def api_query(self, privateAPI=False, req={}):
         #public api url
@@ -45,12 +54,9 @@ class poloniex:
                 'Sign': sign,
                 'Key': self.APIkey
             }
-
             ret = self.request('POST', urlT, data=query_string, headers=headers)
         loop = asyncio.get_event_loop()
-        resp = loop.run_until_complete(ret)
-        loop.close()
-        return resp
+        return loop.run_until_complete(ret)
 
 
 # PUBLIC HTTP API METHODS:

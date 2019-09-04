@@ -13,23 +13,20 @@ class poloniex:
         self.APIkey = APIkey
         self.Secret = Secret
 
+    async def response_status(self, response):
+        if response.status == 200:
+            return await response.json()
+        else:
+            print(response.status)
+            print(await response.text())
+
     async def request(self, type, url, params={}, data={}, headers={}):
         async with aiohttp.ClientSession() as session:
-            while True:
-                if type == 'GET':
-                    async with session.get(url, params=params) as resp:
-                        if resp.status == 200:
-                            return await resp.json()
-                        else:
-                            print(resp.status)
-                            print(await resp.text())
-                elif type == 'POST':
-                    async with session.post(url, data=data, headers=headers) as resp:
-                        if resp.status == 200:
-                            return await resp.json()
-                        else:
-                            print(resp.stauts)
-                            print(await resp.text())
+            if type == 'GET':
+                resp = await session.get(url, params=params)
+            elif type == 'POST':
+                resp = await session.post(url, data=data, headers=headers)
+            return self.response_status(resp)
 
     def api_query(self, privateAPI=False, req={}):
         #public api url

@@ -26,7 +26,7 @@ class poloniex:
                 resp = await session.get(url, params=params)
             elif type == 'POST':
                 resp = await session.post(url, data=data, headers=headers)
-            return self.response_status(resp)
+            return await self.response_status(resp)
 
     def api_query(self, privateAPI=False, req={}):
         #public api url

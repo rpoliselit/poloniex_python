@@ -16,6 +16,9 @@ class poloniex:
     async def response_status(self, response):
         if response.status == 200:
             return await response.json()
+        elif response.status == 522:
+            print('Conection error\nCoinection timed out\n:CLOUDFLARE_ERROR_1000S_BOX:')
+            time.sleep(3*60)
         else:
             print(response.status)
             print(await response.text())

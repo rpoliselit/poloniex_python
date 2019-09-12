@@ -17,18 +17,23 @@ class poloniex:
         if response.status == 200:
             return await response.json()
         elif response.status == 403:
-            print("""The exchange is currently under maintenance.
-            Please check our poloniex Twitter feed for updates.
-            """)
+            msg1 = 'MAINTENANCE MODE'
+            msg2 = 'The exchange is currently under maintenance.'
+            msg3 = 'Please check our poloniex Twitter feed for updates.'
+            print(f"{msg1}\n{msg2}\n{msg3}")
             time.sleep(5*60)
         elif response.status == 522:
-            print('Connection error\nConnection timed out\n:CLOUDFLARE_ERROR_1000S_BOX:')
+            msg1 = 'Connection error'
+            msg2 = 'Connection timed out'
+            msg3 = ':CLOUDFLARE_ERROR_1000S_BOX:'
+            print(f"{msg1}\n{msg2}\n{msg3}")
             time.sleep(60)
         elif response.status == 504:
-            print("""Connection error
-            Sorry, we're unable to connect to the server at the moment.
-            Please try again in a few minutes.
-            Ray ID: 5152b7813db7db78""")
+            msg1 = 'Connection error'
+            msg2 = "Sorry, we're unable to connect to the server at the moment."
+            msg3 = 'Please try again in a few minutes.'
+            msg4 = 'Ray ID: 5152b7813db7db78'
+            print(f"{msg1}\n{msg2}\n{msg3}\n{msg4}")
             time.sleep(60)
         else:
             print(response.status)

@@ -16,6 +16,11 @@ class poloniex:
     async def response_status(self, response):
         if response.status == 200:
             return await response.json()
+        elif response.status == 403:
+            print("""The exchange is currently under maintenance.
+            Please check our poloniex Twitter feed for updates.
+            """)
+            time.sleep(5*60)
         elif response.status == 522:
             print('Connection error\nConnection timed out\n:CLOUDFLARE_ERROR_1000S_BOX:')
             time.sleep(60)

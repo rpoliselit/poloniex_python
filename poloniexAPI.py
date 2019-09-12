@@ -17,8 +17,14 @@ class poloniex:
         if response.status == 200:
             return await response.json()
         elif response.status == 522:
-            print('Conection error\nCoinection timed out\n:CLOUDFLARE_ERROR_1000S_BOX:')
-            time.sleep(3*60)
+            print('Connection error\nConnection timed out\n:CLOUDFLARE_ERROR_1000S_BOX:')
+            time.sleep(60)
+        elif response.status == 504:
+            print("""Connection error
+            Sorry, we're unable to connect to the server at the moment.
+            Please try again in a few minutes.
+            Ray ID: 5152b7813db7db78""")
+            time.sleep(60)
         else:
             print(response.status)
             print(await response.text())

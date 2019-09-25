@@ -30,18 +30,16 @@ class poloniex:
             msg3 = ':CLOUDFLARE_ERROR_1000S_BOX:'
             print(f"{msg1}\n{msg2}\n{msg3}")
             time.sleep(60)
-        elif response.status == 504:
+        elif response.status in [502, 504, 520]:
             msg1 = 'CONNECTION ERROR'
             msg2 = "Sorry, we're unable to connect to the server at the moment."
             msg3 = 'Please try again in a few minutes.'
-            msg4 = 'Ray ID: 5152b7813db7db78'
-            print(f"{msg1}\n{msg2}\n{msg3}\n{msg4}")
-            time.sleep(60)
-        elif response.status == 520:
-            msg1 = 'CONNECTION ERROR'
-            msg2 = "Sorry, we're unable to connect to the server at the moment."
-            msg3 = 'Please try again in a few minutes.'
-            msg4 = 'Ray ID: 518639ac586fdbb4'
+            if response.status == 502:
+                msg4 = 'Ray ID: 51bebe9bfe50cfe4'
+            elif response.status == 504:
+                msg4 = 'Ray ID: 5152b7813db7db78'
+            elif response.status == 520:
+                msg4 = 'Ray ID: 518639ac586fdbb4'
             print(f"{msg1}\n{msg2}\n{msg3}\n{msg4}")
             time.sleep(60)
         else:

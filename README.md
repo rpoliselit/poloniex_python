@@ -1,5 +1,5 @@
 # poloniex_python
-This is a module to use the Poloniex Exchange API with python.
+This is a module to use the Poloniex Exchange API with python. Any questions about the API check out the official documentation at https://docs.poloniex.com/#introduction.
 
 It is recommended to touch a `key.py` that contains your Poloniex credentials as follows:
 ```
@@ -49,6 +49,8 @@ Parameter | Mandatory
 --------- | ---------
 Symbol | No
 Currency/Asset | No
+* Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, `BTC` is used as currency to buy a given asset, `LTC`.
+* `Currency` or `asset` from a given `symbol`.
 
 Example:
 ```
@@ -58,15 +60,27 @@ client.r24hVolume('BTC_LTC', 'LTC')
 
 Parameter | Mandatory
 --------- | ---------
+Symbol | Yes
+Depth | Yes
+Field | No
+* Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, `BTC` is used as currency to buy a given asset, `LTC`.
+* `Depth` means the amount of `asks` and `bids` in response. Its maximum value is 100. _NOTE_: Consider using the Websocket API over HTTP if you are looking for fresh and full order book depth.
+* `Field` can be filled with `asks`, `bids`, `isFrozen`, and `seq`.
+* `Symbol` and `depth` are mandatory following the API, however here the default value for both are, respectively, `all` and `50`.
+
 ```
-client.rOrderBook()
+client.rOrderBook('BTC_LTC', 4, 'asks')
 ```
 ### 2.4 - Market trade history
+Returns the past 200 trades for a given market.
 
 Parameter | Mandatory
 --------- | ---------
+Symbol | Yes
+* Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, `BTC` is used as currency to buy a given asset, `LTC`.
+
 ```
-client.rMarketTradeHistory()
+client.rMarketTradeHistory('BTC_LTC')
 ```
 ### 2.5 - Chart data
 

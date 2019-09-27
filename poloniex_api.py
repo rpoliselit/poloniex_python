@@ -174,7 +174,7 @@ class poloniex:
         '''
         Returns information about currencies.
         :currency (optional): A given currency e.g. 'BTC', 'LTC', 'XMR', etc...
-        :field (optional): Information from a specific field, such as 'id', 'name', 'txFee', minConf, 'depositAddress', 'disabled', 'delisted', 'frozen', and 'isGeofenced'.
+        :field (optional): Information from a specific field, such as 'id', 'name', 'txFee', 'minConf', 'depositAddress', 'disabled', 'delisted', 'frozen', and 'isGeofenced'.
         '''
         req = {'command' : 'returnCurrencies'}
         x = self.api_query(False, req)
@@ -186,16 +186,20 @@ class poloniex:
                 x = x[field]
         return x
 
-    def rLoanOrders(self, currency):
+    def rLoanOrders(self, currency, field=None):
         '''
-        Returns the list of loan offers and demands for a given currency
+        Returns the list of loan offers and demands for a given currency.
         :currency: A given currency e.g. 'BTC', 'LTC', 'XMR', etc...
+        :field (optional): Information from a specific field, such as 'offers' and 'demands'.
         '''
         req = {
             'command':'returnLoanOrders',
             'currency': currency
         }
-        return self.api_query(False, req)
+        x = self.api_query(False, req)
+        if field is not None and x is not None:
+            x = x[field]
+        return x
 
 
 # TRADING API METHODS:

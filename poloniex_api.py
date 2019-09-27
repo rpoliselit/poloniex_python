@@ -4,6 +4,9 @@ import time
 import hmac, hashlib
 from urllib.parse import urlencode
 
+def create_timestamp(datestr, format="%Y-%m-%d %H:%M:%S"):
+    return time.mktime(time.strptime(datestr, format))
+
 class poloniex:
 
     def __init__(self, APIkey, Secret):
@@ -56,14 +59,14 @@ class poloniex:
 
     def api_query(self, private_api=False, req={}):
         #public api url
-        urlP = 'https://poloniex.com/public'
+        url_public = 'https://poloniex.com/public'
         #trading api url
-        urlT = 'https://poloniex.com/tradingApi'
+        url_trade = 'https://poloniex.com/tradingApi'
         #websockets api url
-        urlWS = 'wss://api2.poloniex.com'
+        url_websocket = 'wss://api2.poloniex.com'
 
         if private_api == False:
-            ret = self.request('GET', urlP, params=req)
+            ret = self.request('GET', url_public, params=req)
         elif private_api == True:
             req['nonce'] = int(time.time()*1000)
             query_string = urlencode(req)
@@ -77,7 +80,7 @@ class poloniex:
                 'Sign': sign,
                 'Key': self.APIkey
             }
-            ret = self.request('POST', urlT, data=query_string, headers=headers)
+            ret = self.request('POST', url_trade, data=query_string, headers=headers)
         loop = asyncio.get_event_loop()
         return loop.run_until_complete(ret)
 
@@ -155,7 +158,7 @@ class poloniex:
         :start ("%Y-%m-%d %H:%M:%S"): The start of the window in seconds since the unix epoch.
         :period: Candlestick period in seconds. Valid values are 300, 900, 1800, 7200, 14400, and 86400.
         '''
-        start = createTimeStamp(start)
+        start = create_timestamp(start)
         req = {
             'command': 'returnChartData',
             'currencyPair': currency_pair,

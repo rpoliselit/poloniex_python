@@ -241,7 +241,7 @@ class poloniex:
 
     def rTradeHistory(self, currency_pair='all',start=None, end=None):
         '''
-        Returns your trade history for a given market
+        Returns your trade history for a given market.
         :currency_pair (default = all): A given currency pair e.g. 'BTC_LTC', 'BTC_DASH', etc...
         :start (optional): "%Y-%m-%d %H:%M:%S"
         :end (optional): "%Y-%m-%d %H:%M:%S"
@@ -251,9 +251,11 @@ class poloniex:
             'currencyPair' : currency_pair
         }
         if start is not None:
-            req['start'] = start
+            start = create_timestamp(start)
+            req['start'] = str(start)
         if end is not None:
-            req['end'] = end
+            end = create_timestamp(end)
+            req['end'] = str(end)
         return self.api_query(True, req)
 
     def limitBuy(self, currency_pair, rate, amount, fok=False, ioc=False, po=False):

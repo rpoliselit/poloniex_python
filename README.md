@@ -1,7 +1,7 @@
 # poloniex_python
 Module to use the Poloniex Exchange API with python.
 
-It is recommended to touch a key.py that contains your poloniex credentials as follows:
+It is recommended to touch a `key.py` that contains your poloniex credentials as follows:
 ```
 apikey = 'paste_your_api_key_here'
 secret = 'paste_your_secret_here'
@@ -27,14 +27,14 @@ client.SOMEMETHOD()
 These methods work without signature, i.e. it is not mandatory the Poloniex credentials in order to use them.
 
 ### 2.1 - Ticker
-Retrieves summary information for each 'symbol' listed on the exchange. Each 'symbol' in Poloniex is written in capital letters as 'CURRENCY_ASSET'. For instance 'BTC_LTC', BTC is used as currency to buy a given asset, LTC.
+Retrieves summary information for each `symbol` listed on the exchange. Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, BTC is used as currency to buy a given asset, LTC.
 
 Parameter | Mandatory
 --------- | ---------
 Symbol | No
 Field | No
 
-'Field' can be filled with 'id', 'last', 'lowestAsk', 'highestBid', 'percentChange', 'baseVolume', 'quoteVolume', 'isFrozen', 'high24hr', and 'low24hr'.
+`Field` can be filled with `id`, `last`, `lowestAsk`, `highestBid`, `percentChange`, `baseVolume`, `quoteVolume`, `isFrozen`, `high24hr`, and `low24hr`.
 
 Example:
 ```
@@ -77,3 +77,4 @@ rLoanOrders()
 Only theses methods needs signature.
 
 ## 4 - Websocket methods
+Coming soon.

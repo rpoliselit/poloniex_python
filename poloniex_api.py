@@ -54,7 +54,7 @@ class poloniex:
                 resp = await session.post(url, data=data, headers=headers)
             return await self.response_status(resp)
 
-    def api_query(self, privateAPI=False, req={}):
+    def api_query(self, private_api=False, req={}):
         #public api url
         urlP = 'https://poloniex.com/public'
         #trading api url
@@ -62,9 +62,9 @@ class poloniex:
         #websockets api url
         urlWS = 'wss://api2.poloniex.com'
 
-        if privateAPI == False:
+        if private_api == False:
             ret = self.request('GET', urlP, params=req)
-        elif privateAPI == True:
+        elif private_api == True:
             req['nonce'] = int(time.time()*1000)
             query_string = urlencode(req)
             post_data = query_string.encode("UTF-8")
@@ -372,7 +372,7 @@ class poloniex:
 # WEBSOCKETS API METHODS
     def wsTicker(self):
         req = {'command':'subscribe', 'chanel':1002}
-        # return self.api_query(privateAPI='WS', req=req)
+        # return self.api_query(private_api='WS', req=req)
 
     def ws24hVolume(self):
         req = {'command':'subscribe', 'chanel':1003}

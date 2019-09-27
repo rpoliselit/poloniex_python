@@ -1,4 +1,4 @@
-from poloniexAPI import poloniex
+from poloniex_api import poloniex
 import keys
 api = keys.poloniex_apikey
 secret = keys.poloniex_secret

@@ -151,7 +151,7 @@ class poloniex:
         }
         return self.api_query(False, req)
 
-    def rChartData(self, currency_pair, start, period):
+    def rChartData(self, currency_pair, start, period, end=None):
         '''
         Returns candlestick chart data.
         :currency_pair: A given currency pair e.g. 'BTC_LTC', 'BTC_DASH', etc...
@@ -162,11 +162,13 @@ class poloniex:
         req = {
             'command': 'returnChartData',
             'currencyPair': currency_pair,
-            'start': start,
-            'period': period
+            'start': str(start),
+            'period': str(period)
         }
-        x = self.api_query(False, req)
-        return x
+        if end is not None:
+            end = create_timestamp(end)
+            req['end'] = str(end)
+        return self.api_query(False, req)
 
     def rCurrencies(self, currency=None, field=None):
         '''

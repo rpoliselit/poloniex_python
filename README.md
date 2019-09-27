@@ -24,10 +24,10 @@ client.SOMEMETHOD()
 ```
 
 ## 2 - Public methods
-These methods work without signature, i.e. it is not mandatory the Poloniex credentials in order to use them.
+These methods work without signature, i.e. the Poloniex credentials are NOT mandatory.
 
 ### 2.1 - Ticker
-Retrieves summary information for each `symbol` listed on the exchange. Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, BTC is used as currency to buy a given asset, LTC.
+Retrieves summary information for each `symbol` listed on the exchange. Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, `BTC` is used as currency to buy a given asset, `LTC`.
 
 Parameter | Mandatory
 --------- | ---------
@@ -74,7 +74,7 @@ client.rCurrencies()
 rLoanOrders()
 ```
 ## 3 - Trade methods
-Only theses methods needs signature.
+Only theses methods needs signature, i.e. the Poloniex credentials are mandatory.
 
 ## 4 - Websocket methods
 Coming soon.

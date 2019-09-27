@@ -87,8 +87,7 @@ client.rMarketTradeHistory('BTC_LTC')
 ```
 
 ### 2.5 - Chart data
-Returns candlestick chart data.
-`start` and `end` are given as `YEAR-MONTH-DAY HOUR:MINUTES:SECONDS`.
+Returns candlestick chart data. `start` and `end` are given as `YEAR-MONTH-DAY HOUR:MINUTES:SECONDS`.
 
 Parameter | Mandatory
 --------- | ---------
@@ -137,38 +136,61 @@ client.rLoanOrders('BTC','offers')
 ```
 
 ## 3 - Trading methods
-Only these methods need signature, i.e. the Poloniex credentials are mandatory.
+These methods need signature, i.e. the Poloniex credentials are mandatory.
 
 ### 3.1 - Balances
+Returns all of your balances available for trade after having deducted all open orders.
 
 Parameter | Mandatory
 --------- | ---------
+currency | No
+* `currency` refers to abbreviation of a given asset name. For instance `BTC` is the abbreviation of Bitcoin.
+
 ```
-client.rBalances()
+client.rBalances('BTC')
 ```
 
 ### 3.2 - Complete balances
+Returns all of your balances, including available balance, balance on orders, and the estimated BTC value of your balance.
 
 Parameter | Mandatory
 --------- | ---------
+currency | No
+field | No
+* `currency` refers to abbreviation of a given asset name. For instance `BTC` is the abbreviation of Bitcoin.
+* `field` can be filled with `available`,`onOrders`, and `btcValue`.
+
 ```
-client.rCompleteBalances()
+client.rCompleteBalances('BTC', 'available')
 ```
 
 ### 3.3 - Open orders
+Returns your open orders for a given market.
 
 Parameter | Mandatory
 --------- | ---------
+symbol | Yes
+* Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, `BTC` is used as currency to buy a given asset, `LTC`. _Note_: `symbol` is mandatory following the API, however here the default value is `all`.
+
 ```
-client.rOpenOrders()
+client.rOpenOrders('BTC_LTC')
 ```
 
 ### 3.4 - Trade history
+Returns your trade history for a given market. `start` and `end` are given as `YEAR-MONTH-DAY HOUR:MINUTES:SECONDS`.
 
 Parameter | Mandatory
 --------- | ---------
+symbol | Yes
+start | No
+end | No
+* Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, `BTC` is used as currency to buy a given asset, `LTC`. _Note_: `symbol` is mandatory following the API, however here the default value is `all`.
+* `start` of time window.
+* `end` of time window.
+* The range between `start` and `end` is limited to one day.
+
 ```
-client.rTradeHistory()
+client.rTradeHistory('BTC_LTC')
 ```
 
 ### 3.5 - Limit buy
@@ -228,6 +250,13 @@ Parameter | Mandatory
 ```
 client.withdraw()
 ```
+
+### 3.12 - Deposit address
+Coming soon.
+### 3.13 - Generate new addresses
+Coming soon.
+### 3.14 - Deposits and withdraws history
+Coming soon.
 
 ## 4 - Websocket methods
 Coming soon.

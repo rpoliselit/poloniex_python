@@ -22,7 +22,7 @@ import key
 ```
 
 ### Client
-The 'poloniex' class is the object that connects you to Poloniex's server as a client. Its initial parameters are your credentials in exchange: API key and secret.
+The 'poloniex' class is the object that connects you to Poloniex's server as a client. Its initial parameters are your credentials in exchange: `apikey` and `secret`.
 
 First of all make the following client assignment:
 ```
@@ -176,6 +176,9 @@ client.rLoanOrders('BTC','offers')
 
 ## Private HTTP methods
 These methods need signature, i.e. the Poloniex credentials are mandatory.
+* The base endpoint is: https://poloniex.com/tradingApi
+* Endpoint returns JSON object.
+* All methods can return either JSON object, or array.
 
 ### Balances
 Returns all of your balances available for trade after having deducted all open orders.
@@ -298,4 +301,5 @@ Coming soon.
 Coming soon.
 
 ## Websocket methods
+* The base endpoint is: wss://api2.poloniex.com
 Coming soon.

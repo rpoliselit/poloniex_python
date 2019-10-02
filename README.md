@@ -1,5 +1,13 @@
 # poloniex_python
-This is a module to use the Poloniex Exchange API with python. Any questions about the API check out the official documentation at https://docs.poloniex.com/#introduction.
+Here we have a non-official module to use the Poloniex Exchange API with python 3. Any questions about the API check out the official documentation at https://docs.poloniex.com/#introduction. Our code uses [aiohttp](https://aiohttp.readthedocs.io/en/stable/) and [asyncio](https://docs.python.org/3/library/asyncio.html) libraries in order to interact with the exchange server.
+
+Poloniex provides both HTTP and websocket APIs for interacting with the exchange. Both allow read access to public market data and private read access to your account. Private write access to your account is available via the private HTTP API.
+
+The public HTTP endpoint is accessed via `GET` requests while the private endpoint is accessed via `HMAC-SHA512` signed `POST` requests using API keys. Both types of HTTP endpoints return results in `JSON` format.
+
+The websocket API allows push notifications about the public order books, lend books and your private account. Similarly to the HTTP API, it requires `HMAC-SHA512` signed requests using API keys for requests related to your private account.
+
+## Get starting
 
 It is recommended to touch a `key.py` that contains your Poloniex credentials as follows:
 ```
@@ -13,7 +21,9 @@ from poloniex_api import poloniex
 import key
 ```
 
-## 1 - Client
+### Client
+The 'poloniex' class is the object that connects you to Poloniex's server as a client. Its initial parameters are your credentials in exchange: API key and secret.
+
 First of all make the following client assignment:
 ```
 client = poloniex(key.apikey, key.secret)
@@ -24,10 +34,39 @@ Any method is called following the format:
 client.NAME_OF_THE_METHOD()
 ```
 
-## 2 - Public methods
-These methods work without signature, i.e. the Poloniex credentials are NOT mandatory.
+From now on we have all the methods described, exemplified, and ordered as the summary:
+- [Public HTTP methods](#public-http-methods)
+ - [Ticker](#ticker)
+ - [24h volume](#24h-volume)
+ - [Order book](#order-book)
+ - [Market trade history](#market-trade-history)
+ - [Chart date](#chart-data)
+ - [Currencies](#currencies)
+ - [Loan orders](#loan-orders)
+- [Private HTTP methods](#private-http-methods)
+ - [Balances](#balances)
+ - [Complete balances](#complete-balances)
+ - [Open orders](#open-orders)
+ - [Trade history](#trade-history)
+ - [Limit buy](#limit-buy)
+ - [Limit sell](#limit-sell)
+ - [Market buy](#market-buy)
+ - [Market sell](#market-sell)
+ - [Cancel order](#cancel-order)
+ - [Cancel all orders](#cancel-all-orders)
+ - [Withdraw](#withdraw)
+ - [Deposit address](#deposit-address)
+ - [Generate new addresses](#generate-new-addresses)
+ - [Deposits and withdraws history](#deposits-and-withdraws-history)
+- [Websocket methods](#websocket-methods)
 
-### 2.1 - Ticker
+## Public HTTP methods
+These methods work without signature, i.e. the Poloniex credentials are NOT mandatory.
+* The base endpoint is: https://poloniex.com/public
+* Endpoint returns JSON object.
+* All methods can return either JSON object, or array, or float.
+
+### Ticker
 Retrieves summary information for each `symbol` listed on the exchange.
 
 Parameter | Mandatory
@@ -42,7 +81,7 @@ Example:
 client.rTicker('BTC_LTC', 'last')
 ```
 
-### 2.2 - 24h volume
+### 24h volume
 Returns the 24-hour volume for all markets as well as totals for primary currencies.
 
 Parameter | Mandatory
@@ -57,7 +96,7 @@ Example:
 client.r24hVolume('BTC_LTC', 'LTC')
 ```
 
-### 2.3 - Order book
+### Order book
 Returns the order book for a given market, as well as a sequence number used by websockets for synchronization of book updates and an indicator specifying whether the market is frozen.
 
 Parameter | Mandatory
@@ -74,7 +113,7 @@ field | No
 client.rOrderBook('BTC_LTC', 4, 'asks')
 ```
 
-### 2.4 - Market trade history
+### Market trade history
 Returns the past 200 trades for a given market.
 
 Parameter | Mandatory
@@ -86,7 +125,7 @@ symbol | Yes
 client.rMarketTradeHistory('BTC_LTC')
 ```
 
-### 2.5 - Chart data
+### Chart data
 Returns candlestick chart data. `start` and `end` are given as `YEAR-MONTH-DAY HOUR:MINUTES:SECONDS`.
 
 Parameter | Mandatory
@@ -105,7 +144,7 @@ Example:
 client.rChartData('BTC_LTC', '2019-08-18 18:45:00', 300)
 ```
 
-### 2.6 - Currencies
+### Currencies
 Returns information about currencies.
 
 Parameter | Mandatory
@@ -120,7 +159,7 @@ Example:
 client.rCurrencies('BTC', 'txFee')
 ```
 
-### 2.7 - Loan orders
+### Loan orders
 Returns the list of loan offers and demands for a given currency.
 
 Parameter | Mandatory
@@ -135,10 +174,10 @@ Example:
 client.rLoanOrders('BTC','offers')
 ```
 
-## 3 - Trading methods
+## Private HTTP methods
 These methods need signature, i.e. the Poloniex credentials are mandatory.
 
-### 3.1 - Balances
+### Balances
 Returns all of your balances available for trade after having deducted all open orders.
 
 Parameter | Mandatory
@@ -150,7 +189,7 @@ currency | No
 client.rBalances('BTC')
 ```
 
-### 3.2 - Complete balances
+### Complete balances
 Returns all of your balances, including available balance, balance on orders, and the estimated BTC value of your balance.
 
 Parameter | Mandatory
@@ -164,7 +203,7 @@ field | No
 client.rCompleteBalances('BTC', 'available')
 ```
 
-### 3.3 - Open orders
+### Open orders
 Returns your open orders for a given market.
 
 Parameter | Mandatory
@@ -176,7 +215,7 @@ symbol | Yes
 client.rOpenOrders('BTC_LTC')
 ```
 
-### 3.4 - Trade history
+### Trade history
 Returns your trade history for a given market. `start` and `end` are given as `YEAR-MONTH-DAY HOUR:MINUTES:SECONDS`.
 
 Parameter | Mandatory
@@ -193,7 +232,7 @@ end | No
 client.rTradeHistory('BTC_LTC')
 ```
 
-### 3.5 - Limit buy
+### Limit buy
 
 Parameter | Mandatory
 --------- | ---------
@@ -201,7 +240,7 @@ Parameter | Mandatory
 client.limitBuy()
 ```
 
-### 3.6 - Limit sell
+### Limit sell
 
 Parameter | Mandatory
 --------- | ---------
@@ -209,7 +248,7 @@ Parameter | Mandatory
 client.limitSell()
 ```
 
-### 3.7 - Market buy
+### Market buy
 The Poloniex REST API has not market orders from default. So this method is a limit order which emulates a market order.
 
 Parameter | Mandatory
@@ -218,7 +257,7 @@ Parameter | Mandatory
 client.marketBuy()
 ```
 
-### 3.8 - Market sell
+### Market sell
 The Poloniex REST API has not market orders from default. So this method is a limit order which emulates a market order.
 
 Parameter | Mandatory
@@ -227,7 +266,7 @@ Parameter | Mandatory
 client.marketSell()
 ```
 
-### 3.9 - Cancel order
+### Cancel order
 
 Parameter | Mandatory
 --------- | ---------
@@ -235,7 +274,7 @@ Parameter | Mandatory
 client.cancelOrder()
 ```
 
-### 3.10 - Cancel all orders
+### Cancel all orders
 
 Parameter | Mandatory
 --------- | ---------
@@ -243,7 +282,7 @@ Parameter | Mandatory
 client.cancelAllOrders()
 ```
 
-### 3.11 - Withdraw
+### Withdraw
 
 Parameter | Mandatory
 --------- | ---------
@@ -251,12 +290,12 @@ Parameter | Mandatory
 client.withdraw()
 ```
 
-### 3.12 - Deposit address
+### Deposit address
 Coming soon.
-### 3.13 - Generate new addresses
+### Generate new addresses
 Coming soon.
-### 3.14 - Deposits and withdraws history
+### Deposits and withdraws history
 Coming soon.
 
-## 4 - Websocket methods
+## Websocket methods
 Coming soon.

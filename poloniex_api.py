@@ -344,7 +344,7 @@ class poloniex:
                 break
         return list_resp
 
-    def cancelOrder(self, currency_pair, order_Number):
+    def cancelOrder(self, currency_pair, order_number):
         '''
         Cancels an order you have placed in a given market.
         :currency_pair: The major and minor currency defining the market where this sell order should be placed.
@@ -353,7 +353,7 @@ class poloniex:
         req = {
             'command' : 'cancelOrder',
             'currencyPair' : currency_pair,
-            'orderNumber' : order_Number
+            'orderNumber' : str(order_number)
         }
         return self.api_query(True, req)
 
@@ -367,16 +367,20 @@ class poloniex:
             req['currencyPair'] = currency_pair
         return self.api_query(True, req)
 
-    def withdraw(self, currency, amount, address):
+    def withdraw(self, currency, amount, address, payment_id=None, currency_to_withdraw_as=None):
         '''
         Immediately places a withdrawal for a given currency, with no email confirmation. In order to use this method, withdrawal privilege must be enabled for your API key.
         '''
         req = {
             'command' : 'withdraw',
             'currency' : currency,
-            'amount' : amount,
+            'amount' : str(amount),
             'address' : address
         }
+        if payment_id is not None:
+            req['paymentId'] = str(payment_id)
+        if currencyToWithdrawAs is not None:
+            req['currencyToWithdrawAs'] = currency_to_withdraw_as
         return api_query(True, req)
 
 

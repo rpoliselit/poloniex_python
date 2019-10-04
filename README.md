@@ -330,7 +330,7 @@ Cancels all open orders in a given market or, if no market is provided, all open
 Parameter | Mandatory
 --------- | ---------
 symbol | No
-* `symbol` of a given market written is capital letters.
+* `symbol` of a given market written in capital letters.
 
 ```
 client.cancelAllOrders()
@@ -341,7 +341,7 @@ Immediately places a withdrawal for a given currency, with no email confirmation
 
 Parameter | Mandatory
 --------- | ---------
-currency | yes
+currency | Yes
 amount | Yes
 address | Yes
 payment_id | No
@@ -353,7 +353,7 @@ currency_to_withdraw_as | No
 * For currencies where there are multiple networks to choose from you need to specify the param: `currency_to_withdraw_as`. For `USDT` use `currency_to_withdraw_as`=`USDTTRON` or `USDTETH`. The default for `USDT` is Omni which is used if `currency_to_withdraw_as` is not specified.
 
 ```
-client.withdraw('USDT', '456.54', 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t', currency_to_withdraw_as=USDTTRON)
+client.withdraw('USDT', '456.54', 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t', currency_to_withdraw_as='USDTTRON')
 ```
 
 ### Deposit address

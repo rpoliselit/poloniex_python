@@ -236,61 +236,124 @@ client.rTradeHistory('BTC_LTC')
 ```
 
 ### Limit buy
+Places a limit buy order in a given market. If successful, the method will return the order number.
 
 Parameter | Mandatory
 --------- | ---------
+symbol | Yes
+rate | Yes
+amount | Yes
+fok | No
+ioc | No
+po | No
+* Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, `BTC` is used as currency to buy a given asset, `LTC`.
+* The `rate` to purchase the `ASSET` in `CURRENCY` units as definition of symbol above.
+* Total `amount` of the `ASSET` units as definition of symbol above.
+* `fok` (fill or kill) -- if this order should either fill in its entirety or be completely aborted.
+* `ioc` (immediate or cancel) -- if this order can be partially or completely filled, but any portion of the order that cannot be filled immediately will be canceled.
+* `po` (post only) -- if you want this buy order to only be placed if no portion of it fills immediately.
+
+
 ```
-client.limitBuy()
+client.limitBuy('BTC_LTC', '0.00685070', '32.6', ioc=True)
 ```
 
 ### Limit sell
+Places a limit sell order in a given market. If successful, the method will return the order number.
 
 Parameter | Mandatory
 --------- | ---------
+symbol | Yes
+rate | Yes
+amount | Yes
+fok | No
+ioc | No
+po | No
+* Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, `BTC` is used as currency to buy a given asset, `LTC`.
+* The `rate` to purchase the `ASSET` in `CURRENCY` units as definition of symbol above.
+* Total `amount` of the `ASSET` units as definition of symbol above.
+* `fok` (fill or kill) -- if this order should either fill in its entirety or be completely aborted.
+* `ioc` (immediate or cancel) -- if this order can be partially or completely filled, but any portion of the order that cannot be filled immediately will be canceled.
+* `po` (post only) -- if you want this buy order to only be placed if no portion of it fills immediately.
+
 ```
-client.limitSell()
+client.limitSell('BTC_LTC', '0.00685070', '12.6')
 ```
 
 ### Market buy
-The Poloniex REST API has not market orders from default. So this method is a limit order which emulates a market order.
+The Poloniex REST API has not market orders from default. So this method is a limit buy order which emulates a market buy order.
 
 Parameter | Mandatory
 --------- | ---------
+symbol | Yes
+amount | Yes
+* Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, `BTC` is used as currency to buy a given asset, `LTC`.
+* The `rate` to purchase the `ASSET` in `CURRENCY` units as definition of symbol above.
+* Total `amount` of the `ASSET` units as definition of symbol above.
+
 ```
-client.marketBuy()
+client.marketBuy('BTC_LTC', '23.4432')
 ```
 
 ### Market sell
-The Poloniex REST API has not market orders from default. So this method is a limit order which emulates a market order.
+The Poloniex REST API has not market orders from default. So this method is a limit sell order which emulates a market sell order.
 
 Parameter | Mandatory
 --------- | ---------
+symbol | Yes
+amount | Yes
+* Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, `BTC` is used as currency to buy a given asset, `LTC`.
+* The `rate` to purchase the `ASSET` in `CURRENCY` units as definition of symbol above.
+* Total `amount` of the `ASSET` units as definition of symbol above.
+
 ```
-client.marketSell()
+client.marketSell('BTC_LTC', '120.12334')
 ```
 
 ### Cancel order
+Cancels an order you have placed in a given market. If successful, the method will return a success of 1.
 
 Parameter | Mandatory
 --------- | ---------
+symbol | Yes
+order_number | Yes
+* `symbol` of a given market written is capital letters.
+* `order_number` is the identity number of the order to be canceled.
+
 ```
-client.cancelOrder()
+client.cancelOrder('BTC_DASH','514845991795')
 ```
 
 ### Cancel all orders
+Cancels all open orders in a given market or, if no market is provided, all open orders in all markets. If successful, the method will return a success of 1 along with a json array of `orderNumbers` representing the orders that were canceled. Please note that `cancelAllOrders` can only be called 1 time per 2 minutes.
 
 Parameter | Mandatory
 --------- | ---------
+symbol | No
+* `symbol` of a given market written is capital letters.
+
 ```
 client.cancelAllOrders()
 ```
 
 ### Withdraw
+Immediately places a withdrawal for a given currency, with no email confirmation. In order to use this method, withdrawal privilege must be enabled for your API key.
 
 Parameter | Mandatory
 --------- | ---------
+currency | yes
+amount | Yes
+address | Yes
+payment_id | No
+currency_to_withdraw_as | No
+* `currency` refers to abbreviation of a given asset name, e.g. `BTC` is the abbreviation of Bitcoin.
+* Total `amount` of the `currency` units to withdraw.
+* Your wallet `address`.
+* For withdrawals which support payment IDs, (such as `XMR`) you may optionally specify `payment_id`.
+* For currencies where there are multiple networks to choose from you need to specify the param: `currency_to_withdraw_as`. For `USDT` use `currency_to_withdraw_as`=`USDTTRON` or `USDTETH`. The default for `USDT` is Omni which is used if `currency_to_withdraw_as` is not specified.
+
 ```
-client.withdraw()
+client.withdraw('USDT', '456.54', 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t', currency_to_withdraw_as=USDTTRON)
 ```
 
 ### Deposit address

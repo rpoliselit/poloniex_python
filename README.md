@@ -109,6 +109,7 @@ field | No
 * `field` can be filled with `asks`, `bids`, `isFrozen`, and `seq`.
 * `symbol` and `depth` are mandatory following the API, however here the default value for both are, respectively, `all` and `50`.
 
+Example:
 ```
 client.rOrderBook('BTC_LTC', 4, 'asks')
 ```
@@ -121,6 +122,7 @@ Parameter | Mandatory
 symbol | Yes
 * Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, `BTC` is used as currency to buy a given asset, `LTC`.
 
+Example:
 ```
 client.rMarketTradeHistory('BTC_LTC')
 ```
@@ -188,6 +190,7 @@ Parameter | Mandatory
 currency | No
 * `currency` refers to abbreviation of a given asset name. For instance `BTC` is the abbreviation of Bitcoin.
 
+Example:
 ```
 client.rBalances('BTC')
 ```
@@ -202,6 +205,7 @@ field | No
 * `currency` refers to abbreviation of a given asset name. For instance `BTC` is the abbreviation of Bitcoin.
 * `field` can be filled with `available`,`onOrders`, and `btcValue`.
 
+Example:
 ```
 client.rCompleteBalances('BTC', 'available')
 ```
@@ -214,6 +218,7 @@ Parameter | Mandatory
 symbol | Yes
 * Each `symbol` in Poloniex is written in capital letters as `CURRENCY_ASSET`. For instance `BTC_LTC`, `BTC` is used as currency to buy a given asset, `LTC`. _Note_: `symbol` is mandatory following the API, however here the default value is `all`.
 
+Example:
 ```
 client.rOpenOrders('BTC_LTC')
 ```
@@ -231,6 +236,7 @@ end | No
 * `end` of time window.
 * The range between `start` and `end` is limited to one day.
 
+Example:
 ```
 client.rTradeHistory('BTC_LTC')
 ```
@@ -253,7 +259,7 @@ po | No
 * `ioc` (immediate or cancel) -- if this order can be partially or completely filled, but any portion of the order that cannot be filled immediately will be canceled.
 * `po` (post only) -- if you want this buy order to only be placed if no portion of it fills immediately.
 
-
+Example:
 ```
 client.limitBuy('BTC_LTC', '0.00685070', '32.6', ioc=True)
 ```
@@ -276,6 +282,7 @@ po | No
 * `ioc` (immediate or cancel) -- if this order can be partially or completely filled, but any portion of the order that cannot be filled immediately will be canceled.
 * `po` (post only) -- if you want this buy order to only be placed if no portion of it fills immediately.
 
+Example:
 ```
 client.limitSell('BTC_LTC', '0.00685070', '12.6')
 ```
@@ -291,6 +298,7 @@ amount | Yes
 * The `rate` to purchase the `ASSET` in `CURRENCY` units as definition of symbol above.
 * Total `amount` of the `ASSET` units as definition of symbol above.
 
+Example:
 ```
 client.marketBuy('BTC_LTC', '23.4432')
 ```
@@ -306,6 +314,7 @@ amount | Yes
 * The `rate` to purchase the `ASSET` in `CURRENCY` units as definition of symbol above.
 * Total `amount` of the `ASSET` units as definition of symbol above.
 
+Example:
 ```
 client.marketSell('BTC_LTC', '120.12334')
 ```
@@ -320,6 +329,7 @@ order_number | Yes
 * `symbol` of a given market written is capital letters.
 * `order_number` is the identity number of the order to be canceled.
 
+Example:
 ```
 client.cancelOrder('BTC_DASH','514845991795')
 ```
@@ -332,6 +342,7 @@ Parameter | Mandatory
 symbol | No
 * `symbol` of a given market written in capital letters.
 
+Example:
 ```
 client.cancelAllOrders()
 ```
@@ -352,6 +363,7 @@ currency_to_withdraw_as | No
 * For withdrawals which support payment IDs, (such as `XMR`) you may optionally specify `payment_id`.
 * For currencies where there are multiple networks to choose from you need to specify the param: `currency_to_withdraw_as`. For `USDT` use `currency_to_withdraw_as`=`USDTTRON` or `USDTETH`. The default for `USDT` is Omni which is used if `currency_to_withdraw_as` is not specified.
 
+Example:
 ```
 client.withdraw('USDT', '456.54', 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t', currency_to_withdraw_as='USDTTRON')
 ```

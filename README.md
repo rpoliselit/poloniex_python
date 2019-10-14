@@ -59,7 +59,7 @@ From now on we have all the methods described, exemplified, and ordered as the s
   - [Generate new addresses](#generate-new-addresses)
   - [Deposits and withdraws history](#deposits-and-withdraws-history)
 - [Websocket methods](#websocket-methods)
-_ [DONATE](#donate)
+- [DONATE](#donate)
 
 ## Public HTTP methods
 These methods work without signature, i.e. the Poloniex credentials are NOT mandatory.

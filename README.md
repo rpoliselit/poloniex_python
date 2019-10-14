@@ -59,6 +59,7 @@ From now on we have all the methods described, exemplified, and ordered as the s
   - [Generate new addresses](#generate-new-addresses)
   - [Deposits and withdraws history](#deposits-and-withdraws-history)
 - [Websocket methods](#websocket-methods)
+_ [DONATE](#donate)
 
 ## Public HTTP methods
 These methods work without signature, i.e. the Poloniex credentials are NOT mandatory.
@@ -378,3 +379,8 @@ Coming soon.
 ## Websocket methods
 * The base endpoint is: wss://api2.poloniex.com
 Coming soon.
+
+## DONATE
+Bitcoin (BTC): bc1qe49xvnvgp2qey833ut3qgdv2nltg2xhnv2p6tl
+Decred (DCR): DsWrvibjbh8x8RWdH3CSnsEmD52mi6WxvR6
+DASH: XryxxDNdykosJX5MkNLw9Q5rBVPkNHjmDS

@@ -94,12 +94,12 @@ class poloniex:
         :return: Summery information as dict, or field information as float.
         '''
         req = {'command' : 'returnTicker'}
-        x = self.api_query(False, req)
-        if currency_pair is not None:
-            x = x[currency_pair]
-            if field is not None:
-                x = float(x[field])
-        return x
+        ticker = self.api_query(False, req)
+        if currency_pair != None:
+            ticker = ticker[currency_pair]
+            if field != None:
+                ticker = float(ticker[field])
+        return ticker
 
     def r24hVolume(self, currency_pair=None, currency=None):
         '''
@@ -109,12 +109,12 @@ class poloniex:
         :return: The volume information as dict about currency pair, or specific currency volume as float.
         '''
         req = {'command' : 'return24hVolume'}
-        x = self.api_query(False, req)
-        if currency_pair is not None:
-            x = x[currency_pair]
-            if currency is not None:
-                x = float(x[currency])
-        return x
+        volume = self.api_query(False, req)
+        if currency_pair != None:
+            volume = volume[currency_pair]
+            if currency != None:
+                volume = float(volume[currency])
+        return volume
 
     def rOrderBook(self, currency_pair='all', depth=50, field=None):
         '''
@@ -129,16 +129,16 @@ class poloniex:
             'currencyPair': currency_pair,
             'depth': depth
         }
-        x = self.api_query(False, req)
-        if field is not None and field in x:
-            x = x[field]
+        order_book = self.api_query(False, req)
+        if field != None and field in x:
+            order_book = order_book[field]
             if field == 'asks' or field == 'bids':
-                for elem in x:
+                for elem in order_book:
                     for c, num in enumerate(elem):
                         elem[c] = float(num)
             else:
-                x = int(x)
-        return x
+                order_book = int(order_book)
+        return order_book
 
     def rMarketTradeHistory(self, currency_pair):
         '''
@@ -165,7 +165,7 @@ class poloniex:
             'start': str(start),
             'period': str(period)
         }
-        if end is not None:
+        if end != None:
             end = create_timestamp(end)
             req['end'] = str(end)
         return self.api_query(False, req)
@@ -177,14 +177,14 @@ class poloniex:
         :field (optional): Information from a specific field, such as 'id', 'name', 'txFee', 'minConf', 'depositAddress', 'disabled', 'delisted', 'frozen', and 'isGeofenced'.
         '''
         req = {'command' : 'returnCurrencies'}
-        x = self.api_query(False, req)
-        if currency is not None:
-            x = x[currency]
+        coin = self.api_query(False, req)
+        if currency != None:
+            coin = coin[currency]
             if field == 'txFee':
-                x = float(x[field])
-            elif field is not None:
-                x = x[field]
-        return x
+                coin = float(coin[field])
+            elif field != None:
+                coin = coin[field]
+        return coin
 
     def rLoanOrders(self, currency, field=None):
         '''
@@ -196,10 +196,10 @@ class poloniex:
             'command':'returnLoanOrders',
             'currency': currency
         }
-        x = self.api_query(False, req)
-        if field is not None and x is not None:
-            x = x[field]
-        return x
+        loan_orders = self.api_query(False, req)
+        if field != None and loan_orders != None:
+            loan_orders = loan_orders[field]
+        return loan_orders
 
 
 # TRADING API METHODS:
@@ -209,10 +209,10 @@ class poloniex:
         :currency (optional): A given currency e.g. 'BTC', 'LTC', 'XMR', etc...
         '''
         req = {'command':'returnBalances'}
-        x = self.api_query(True, req)
-        if currency is not None:
-            x = float(x[currency])
-        return x
+        balances = self.api_query(True, req)
+        if currency != None:
+            balances = float(balances[currency])
+        return balances
 
     def rCompleteBalances(self, currency=None, field=None):
         '''
@@ -221,12 +221,12 @@ class poloniex:
         :field (optional): Information from a given field, such as 'available', 'onOrders', and 'btcValue'.
         '''
         req = {'command':'returnCompleteBalances'}
-        x = self.api_query(True, req)
-        if currency is not None:
-            x = x[currency]
-            if field is not None:
-                x = float(x[field])
-        return x
+        balances = self.api_query(True, req)
+        if currency != None:
+            balances = balances[currency]
+            if field != None:
+                balances = float(balances[field])
+        return balances
 
     def rOpenOrders(self, currency_pair='all'):
         '''
@@ -250,10 +250,10 @@ class poloniex:
             'command' : 'returnTradeHistory',
             'currencyPair' : currency_pair
         }
-        if start is not None:
+        if start != None:
             start = create_timestamp(start)
             req['start'] = str(start)
-        if end is not None:
+        if end != None:
             end = create_timestamp(end)
             req['end'] = str(end)
         return self.api_query(True, req)
@@ -363,7 +363,7 @@ class poloniex:
         :currency_pair (optional): The base and quote currency that define a market.
         '''
         req = {'command' : 'cancelAllOrders'}
-        if currency_pair is not None:
+        if currency_pair != None:
             req['currencyPair'] = currency_pair
         return self.api_query(True, req)
 
@@ -377,9 +377,9 @@ class poloniex:
             'amount' : str(amount),
             'address' : address
         }
-        if payment_id is not None:
+        if payment_id != None:
             req['paymentId'] = str(payment_id)
-        if currencyToWithdrawAs is not None:
+        if currencyToWithdrawAs != None:
             req['currencyToWithdrawAs'] = currency_to_withdraw_as
         return api_query(True, req)
 

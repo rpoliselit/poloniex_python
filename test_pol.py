@@ -3,8 +3,9 @@ import keys
 api = keys.poloniex_apikey
 secret = keys.poloniex_secret
 
+# client = poloniex()
 client = poloniex(api, secret)
-# print(client)
+print(client)
 
 #public api methods
 # print(client.rTicker('BTC_LTC', 'last'))
@@ -16,9 +17,9 @@ client = poloniex(api, secret)
 # print(client.rLoanOrders('BTC','demands'))
 
 #trading api methods
-print(client.rBalances('BTC'))
-# print(client.rCompleteBalances())
-# print(client.rOpenOrders())
+# print(client.rBalances('BTC'))
+# print(client.rCompleteBalances('BTC', 'available'))
+print(client.rOpenOrders('BTC_LTC'))
 # print(client.rTradeHistory())
 # print(client.buy())
 # print(client.sell())

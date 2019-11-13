@@ -4,19 +4,23 @@ import time
 import hmac, hashlib
 from urllib.parse import urlencode
 
-def create_timestamp(datestr, format="%Y-%m-%d %H:%M:%S"):
+def _create_timestamp(datestr, format="%Y-%m-%d %H:%M:%S"):
     return time.mktime(time.strptime(datestr, format))
 
 class poloniex:
 
-    def __init__(self, APIkey, Secret):
+    def __init__(self, APIkey=None, Secret=None):
         '''
         Client.
         '''
         self.APIkey = APIkey
         self.Secret = Secret
 
-    async def response_status(self, response):
+    def __repr__(self):
+        signature = self.APIkey != None and self.Secret != None
+        return "{}igned Poloniex API".format("S" if signature else "Uns")
+
+    async def _response_status(self, response):
         if response.status == 200:
             return await response.json()
         elif response.status == 403:
@@ -49,15 +53,15 @@ class poloniex:
             print(response.status)
             print(await response.text())
 
-    async def request(self, type, url, params={}, data={}, headers={}):
+    async def _request(self, type, url, params={}, data={}, headers={}):
         async with aiohttp.ClientSession() as session:
             if type == 'GET':
                 resp = await session.get(url, params=params)
             elif type == 'POST':
                 resp = await session.post(url, data=data, headers=headers)
-            return await self.response_status(resp)
+            return await self._response_status(resp)
 
-    def api_query(self, private_api=False, req={}):
+    def _api_query(self, private_api=False, req={}):
         #public api url
         url_public = 'https://poloniex.com/public'
         #trading api url
@@ -66,7 +70,7 @@ class poloniex:
         url_websocket = 'wss://api2.poloniex.com'
 
         if private_api == False:
-            ret = self.request('GET', url_public, params=req)
+            ret = self._request('GET', url_public, params=req)
         elif private_api == True:
             req['nonce'] = int(time.time()*1000)
             query_string = urlencode(req)
@@ -80,7 +84,7 @@ class poloniex:
                 'Sign': sign,
                 'Key': self.APIkey
             }
-            ret = self.request('POST', url_trade, data=query_string, headers=headers)
+            ret = self._request('POST', url_trade, data=query_string, headers=headers)
         loop = asyncio.get_event_loop()
         return loop.run_until_complete(ret)
 
@@ -94,7 +98,7 @@ class poloniex:
         :return: Summery information as dict, or field information as float.
         '''
         req = {'command' : 'returnTicker'}
-        ticker = self.api_query(False, req)
+        ticker = self._api_query(False, req)
         if currency_pair != None:
             ticker = ticker[currency_pair]
             if field != None:
@@ -109,7 +113,7 @@ class poloniex:
         :return: The volume information as dict about currency pair, or specific currency volume as float.
         '''
         req = {'command' : 'return24hVolume'}
-        volume = self.api_query(False, req)
+        volume = self._api_query(False, req)
         if currency_pair != None:
             volume = volume[currency_pair]
             if currency != None:
@@ -129,7 +133,7 @@ class poloniex:
             'currencyPair': currency_pair,
             'depth': depth
         }
-        order_book = self.api_query(False, req)
+        order_book = self._api_query(False, req)
         if field != None and field in x:
             order_book = order_book[field]
             if field == 'asks' or field == 'bids':
@@ -149,7 +153,7 @@ class poloniex:
             'command':'returnTradeHistory',
             'currencyPair': currency_pair
         }
-        return self.api_query(False, req)
+        return self._api_query(False, req)
 
     def rChartData(self, currency_pair, start, period, end=None):
         '''
@@ -158,7 +162,7 @@ class poloniex:
         :start ("%Y-%m-%d %H:%M:%S"): The start of the window in seconds since the unix epoch.
         :period: Candlestick period in seconds. Valid values are 300, 900, 1800, 7200, 14400, and 86400.
         '''
-        start = create_timestamp(start)
+        start = _create_timestamp(start)
         req = {
             'command': 'returnChartData',
             'currencyPair': currency_pair,
@@ -166,9 +170,9 @@ class poloniex:
             'period': str(period)
         }
         if end != None:
-            end = create_timestamp(end)
+            end = _create_timestamp(end)
             req['end'] = str(end)
-        return self.api_query(False, req)
+        return self._api_query(False, req)
 
     def rCurrencies(self, currency=None, field=None):
         '''
@@ -177,7 +181,7 @@ class poloniex:
         :field (optional): Information from a specific field, such as 'id', 'name', 'txFee', 'minConf', 'depositAddress', 'disabled', 'delisted', 'frozen', and 'isGeofenced'.
         '''
         req = {'command' : 'returnCurrencies'}
-        coin = self.api_query(False, req)
+        coin = self._api_query(False, req)
         if currency != None:
             coin = coin[currency]
             if field == 'txFee':
@@ -196,7 +200,7 @@ class poloniex:
             'command':'returnLoanOrders',
             'currency': currency
         }
-        loan_orders = self.api_query(False, req)
+        loan_orders = self._api_query(False, req)
         if field != None and loan_orders != None:
             loan_orders = loan_orders[field]
         return loan_orders
@@ -209,7 +213,7 @@ class poloniex:
         :currency (optional): A given currency e.g. 'BTC', 'LTC', 'XMR', etc...
         '''
         req = {'command':'returnBalances'}
-        balances = self.api_query(True, req)
+        balances = self._api_query(True, req)
         if currency != None:
             balances = float(balances[currency])
         return balances
@@ -221,7 +225,7 @@ class poloniex:
         :field (optional): Information from a given field, such as 'available', 'onOrders', and 'btcValue'.
         '''
         req = {'command':'returnCompleteBalances'}
-        balances = self.api_query(True, req)
+        balances = self._api_query(True, req)
         if currency != None:
             balances = balances[currency]
             if field != None:
@@ -237,7 +241,7 @@ class poloniex:
             'command': 'returnOpenOrders',
             'currencyPair': currency_pair
         }
-        return self.api_query(True, req)
+        return self._api_query(True, req)
 
     def rTradeHistory(self, currency_pair='all',start=None, end=None):
         '''
@@ -251,12 +255,12 @@ class poloniex:
             'currencyPair' : currency_pair
         }
         if start != None:
-            start = create_timestamp(start)
+            start = _create_timestamp(start)
             req['start'] = str(start)
         if end != None:
-            end = create_timestamp(end)
+            end = _create_timestamp(end)
             req['end'] = str(end)
-        return self.api_query(True, req)
+        return self._api_query(True, req)
 
     def limitBuy(self, currency_pair, rate, amount, fok=False, ioc=False, po=False):
         '''
@@ -280,7 +284,7 @@ class poloniex:
             req['immediateOrCancel'] = '1'
         if po == True:
             req['postOnly'] = '1'
-        return self.api_query(True, req)
+        return self._api_query(True, req)
 
     def limitSell(self, currency_pair, rate, amount, fok=False, ioc=False, po=False):
         '''
@@ -304,7 +308,7 @@ class poloniex:
             req['immediateOrCancel'] = '1'
         if po == True:
             req['postOnly'] = '1'
-        return self.api_query(True, req)
+        return self._api_query(True, req)
 
     def marketBuy(self, currency_pair, amount):
         """
@@ -355,7 +359,7 @@ class poloniex:
             'currencyPair' : currency_pair,
             'orderNumber' : str(order_number)
         }
-        return self.api_query(True, req)
+        return self._api_query(True, req)
 
     def cancelAllOrders(self, currency_pair=None):
         '''
@@ -365,7 +369,7 @@ class poloniex:
         req = {'command' : 'cancelAllOrders'}
         if currency_pair != None:
             req['currencyPair'] = currency_pair
-        return self.api_query(True, req)
+        return self._api_query(True, req)
 
     def withdraw(self, currency, amount, address, payment_id=None, currency_to_withdraw_as=None):
         '''
@@ -381,13 +385,13 @@ class poloniex:
             req['paymentId'] = str(payment_id)
         if currencyToWithdrawAs != None:
             req['currencyToWithdrawAs'] = currency_to_withdraw_as
-        return api_query(True, req)
+        return _api_query(True, req)
 
 
 # WEBSOCKETS API METHODS
     def wsTicker(self):
         req = {'command':'subscribe', 'chanel':1002}
-        # return self.api_query(private_api='WS', req=req)
+        # return self._api_query(private_api='WS', req=req)
 
     def ws24hVolume(self):
         req = {'command':'subscribe', 'chanel':1003}
